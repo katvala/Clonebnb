@@ -6,20 +6,20 @@ import Navbar from "./components/nabvar/Navbar";
 import RegisterModal from "./components/modals/RegisterModal";
 import ToasterProvider from "./providers/ToasterProvider";
 import LoginModal from "./components/modals/LoginModal";
-import { getCurrentUser } from "./actions/getCurrentUser";
+import getCurrentUser from "./actions/getCurrentUser";
 
-const font = Nunito({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
+export const metadata = {
   title: "Airbnb",
   description: "Airbnb Clone",
 };
 
+const font = Nunito({ subsets: ["latin"] });
+
 export default async function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   const currentUser = await getCurrentUser();
 
   return (
