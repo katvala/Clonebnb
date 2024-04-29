@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "./globals.css";
-import ClientOnly from "./components/ClientOnly";
 import Navbar from "./components/nabvar/Navbar";
+import ClientOnly from "./components/ClientOnly";
 import RegisterModal from "./components/modals/RegisterModal";
-import ToasterProvider from "./providers/ToasterProvider";
 import LoginModal from "./components/modals/LoginModal";
+import ToasterProvider from "./providers/ToasterProvider";
 import getCurrentUser from "./actions/getCurrentUser";
 
 export const metadata = {
@@ -21,7 +21,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const currentUser = await getCurrentUser();
-
+  // console.log("currentUser en RootLayout:", { currentUser });
   return (
     <html lang="en">
       <body className={font.className}>
