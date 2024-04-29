@@ -1,44 +1,47 @@
-"use client"
+"use client";
 
-import { useCallback, useState } from "react"
-import Avatar from "../Avatar"
-import MenuItems from "./MenuItems"
-import { LuGlobe } from "react-icons/lu"
-import { MdMenu } from "react-icons/md"
-import useRegisterModal from "@/app/hooks/useRegisterModal"
-import useLoginModal from "@/app/hooks/useLoginModal"
-import { signOut } from "next-auth/react"
-import { SafeUser } from "@/app/types"
-import useRentModal from "@/app/hooks/useRentModal"
-import { useRouter } from "next/navigation"
+import { useCallback, useState } from "react";
+import Avatar from "../Avatar";
+import MenuItems from "./MenuItems";
+import { LuGlobe } from "react-icons/lu";
+import { MdMenu } from "react-icons/md";
+import useRegisterModal from "@/app/hooks/useRegisterModal";
+import useLoginModal from "@/app/hooks/useLoginModal";
+import { signOut } from "next-auth/react";
+import { SafeUser } from "@/app/types";
+import useRentModal from "@/app/hooks/useRentModal";
+import { useRouter } from "next/navigation";
 
 interface MenuProps {
-  currentUser?: SafeUser | null
+  currentUser?: SafeUser | null;
 }
 
 const Menu: React.FC<MenuProps> = ({ currentUser }) => {
-  const router = useRouter()
-  const registerModal = useRegisterModal()
-  const loginModal = useLoginModal()
-  const rentModal = useRentModal()
-  const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter();
+  const registerModal = useRegisterModal();
+  const loginModal = useLoginModal();
+  const rentModal = useRentModal();
+  const [isOpen, setIsOpen] = useState(false);
 
   const toggleOpen = useCallback(() => {
-    setIsOpen((prev) => !prev)
-  }, [])
+    setIsOpen((prev) => !prev);
+  }, []);
 
   const toggleRent = useCallback(() => {
     if (!currentUser) {
-      return registerModal.onOpen()
+      return registerModal.onOpen();
     }
 
-    rentModal.onOpen()
-    toggleOpen()
-  },[currentUser, registerModal]) 
+    rentModal.onOpen();
+    toggleOpen();
+  }, [currentUser, registerModal, rentModal, toggleOpen]);
 
   return (
     <div className="w-full hidden phone:flex items-center justify-end text-sm gap-2 relative">
-      <div onClick={rentModal.onOpen} className="font-bold whitespace-nowrap text-dark-gray p-3 hover:bg-hover-gray rounded-full cursor-pointer">
+      <div
+        onClick={rentModal.onOpen}
+        className="font-bold whitespace-nowrap text-dark-gray p-3 hover:bg-hover-gray rounded-full cursor-pointer"
+      >
         Airbnb your home
       </div>
 
@@ -55,7 +58,7 @@ const Menu: React.FC<MenuProps> = ({ currentUser }) => {
         <MdMenu size={20} />
 
         {/* User icon */}
-        <Avatar src={currentUser?.image}/>
+        <Avatar src={currentUser?.image} />
       </div>
 
       {isOpen && (
@@ -67,8 +70,8 @@ const Menu: React.FC<MenuProps> = ({ currentUser }) => {
               <MenuItems onClick={() => {}} label="Trips" bold />
               <MenuItems
                 onClick={() => {
-                  router.push('/wishlist')
-                  setIsOpen(false)
+                  router.push("/wishlist");
+                  setIsOpen(false);
                 }}
                 label="Wishlist"
                 border={true}
@@ -95,7 +98,7 @@ const Menu: React.FC<MenuProps> = ({ currentUser }) => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Menu
+export default Menu;
