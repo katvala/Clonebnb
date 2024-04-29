@@ -1,116 +1,67 @@
-"use client";
-import { useCallback, useEffect, useState } from "react";
-import { IoMdClose } from "react-icons/io";
-import Button from "../Button";
+"use client"
+
+import { MdOutlineClose } from "react-icons/md"
+import Button from "../Button"
 
 interface ModalProps {
-  isOpen?: boolean;
-  onClose: () => void;
-  onSubmit: () => void;
-  title?: string;
-  body?: React.ReactNode;
-  footer?: React.ReactNode;
-  actionLabel: string;
-  disabled?: boolean;
-  secondaryAction?: () => void;
-  secondaryActionLabel?: string;
+  label: string
+  isOpen: boolean
+  close?: () => void
+  onSubmit?: () => void
+  secondaryAction?: () => void
+  buttonLabel: string
+  secondaryLabel?: string | null
+  buttonColored?: boolean
+  body?: React.ReactElement
+  footer?: React.ReactElement
 }
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,
-  onClose,
-  onSubmit,
-  title,
+  label,
+  close,
   body,
   footer,
-  actionLabel,
-  disabled,
+  onSubmit,
+  buttonLabel,
+  secondaryLabel,
   secondaryAction,
-  secondaryActionLabel,
+  buttonColored,
 }) => {
-  const [showModal, setShowModal] = useState(isOpen);
 
-  useEffect(() => {
-    setShowModal(isOpen);
-  }, [isOpen]);
-
-  const handleClose = useCallback(() => {
-    if (disabled) {
-      return;
-    }
-    setShowModal(false);
-    setTimeout(() => {
-      onClose();
-    }, 300);
-  }, [disabled, onClose]);
-
-  const handleSubmit = useCallback(() => {
-    if (disabled) {
-      return;
-    }
-    onSubmit();
-  }, [disabled, onSubmit]);
-
-  const handleSecondaryAction = useCallback(() => {
-    if (disabled || !secondaryAction) {
-      return;
-    }
-    secondaryAction();
-  }, [disabled, secondaryAction]);
-
-  if (!isOpen) return null;
-
+  if (!isOpen) return null
+  
   return (
-    <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center overflow-x-hidden overflow-y-auto">
-        <div className="fixed inset-0 bg-black opacity-50"></div>
-        <div className="absolute top-0 right-0 bottom-0 left-0 flex items-center justify-center">
-          <div className="relative w-full md:w-4/6 lg:w-3/6 xl:w-2/5 my-6 mx-auto lg:h-auto">
-            {/*content*/}
-            <div
-              className={`transform transition-all duration-300 ${
-                showModal ? "translate-y-0" : "translate-y-full"
-              }`}
-            >
-              <div className="border rounded-lg shadow-lg relative flex flex-col w-full bg-white">
-                {/*header*/}
-                <div className="flex items-center p-6 rounded-t justify-center relative border-b-[1px]">
-                  <button
-                    onClick={handleClose}
-                    className="absolute left-9 p-1 border-0 hover:opacity-70"
-                  >
-                    <IoMdClose size={18} />
-                  </button>
-                  <div className="text-lg font-semibold">{title}</div>
-                </div>
-                {/*body*/}
-                <div className="p-6 flex-auto">{body}</div>
-                {/*footer*/}
-                <div className="flex flex-col gap-2 p-6">
-                  <div className="flex flex-row items-center gap-4 w-full">
-                    {secondaryAction && secondaryActionLabel && (
-                      <Button
-                        outline
-                        disabled={disabled}
-                        label={secondaryActionLabel}
-                        onClick={handleSecondaryAction}
-                      />
-                    )}
-                    <Button
-                      disabled={disabled}
-                      label={actionLabel}
-                      onClick={handleSubmit}
-                    />
-                  </div>
-                  {footer}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-};
+    <div className="flex items-center justify-center fixed inset-0 bg-dark-gray/50 z-50">
+      <div className="bg-white card-shadow h-full rounded-lg w-full phone:h-max phone:w-[568px] animate-entrance flex flex-col justify-between">
+        <div>
+          <header className="font-bold relative flex items-center justify-center p-5 border-b">
+            {label}
 
-export default Modal;
+            {/* Close icon */}
+            <span
+              onClick={close}
+              className="absolute left-3 p-2 rounded-full hover:bg-hover-gray cursor-pointer"
+            >
+              <MdOutlineClose size={20} />
+            </span>
+          </header>
+          {body}
+        </div>
+        <div className="p-5 flex items-center justify-between gap-5">
+          {secondaryLabel && (
+            <Button text={secondaryLabel} onClick={secondaryAction} secondary />
+          )}
+          <Button
+            text={buttonLabel}
+            onClick={onSubmit}
+            colored={buttonColored}
+          />
+        </div>
+        {footer}
+      </div>
+    </div>
+  )
+}
+
+export default Modal

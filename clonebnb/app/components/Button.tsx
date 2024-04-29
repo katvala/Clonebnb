@@ -1,40 +1,45 @@
-"use client";
-import { IconType } from "react-icons";
+"use client"
 
 interface ButtonProps {
-  label: string;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  disabled?: boolean;
-  outline?: boolean;
-  small?: boolean;
-  icon?: IconType;
+  text: string
+  onClick?: () => void
+  outline?: boolean
+  secondary?: boolean
+  icon?: React.ReactElement
+  colored?: boolean
 }
+
 const Button: React.FC<ButtonProps> = ({
-  label,
+  text,
   onClick,
-  disabled,
   outline,
-  small,
-  icon: Icon,
+  icon,
+  colored,
+  secondary,
 }) => {
-  return (
+  let style = 'bg-accent-pink text-white'
+
+    if (colored) {
+      style = "bg-black text-white"
+    }
+    if (secondary) {
+      style = "bg-white text-black underline"
+    }
+    if (outline) {
+      style = "border border-dark-gray bg-white text-black"
+    }
+
+
+  return (    
     <button
       onClick={onClick}
-      disabled={disabled}
-      className={`relative disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full
-      ${outline ? "bg-white" : "bg-rose-500"}
-      ${outline ? "border-black" : "border-rose-500"}
-      ${outline ? "text-black" : "text-white"}
-      ${small ? "py-1" : "py-3 "}
-      ${small ? "text-sm" : "text-md"}
-      ${small ? "font-light" : "font-semibold "}
-      ${small ? "border-[1px]" : "border-2 "}
-    `}
+      className={`${style} relative w-full font-bold rounded-md cursor-pointer p-3 flex items-center justify-center`}
     >
-      {Icon && <Icon size={24} className="absolute left-4 top-3" />}
-      {label}
-    </button>
-  );
-};
+      {text}
 
-export default Button;
+      {icon && <div className="absolute left-6">{icon}</div>}
+    </button>
+  )
+}
+
+export default Button
